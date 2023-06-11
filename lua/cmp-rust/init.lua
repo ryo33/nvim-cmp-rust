@@ -14,56 +14,45 @@ local function deprioritize_postfix(entry1, entry2)
 end
 
 local function deprioritize_common_traits(entry1, entry2)
-  local function extract_trait(entry)
+  local function is_common_trait(entry)
     local label = entry.completion_item.label
     if label == nil then
-      return nil
-    end
-    -- find `(as Trait)` in the label
-    return label:match "%(as ([^)]+)%)"
-  end
-  local function is_common_trait(trait)
-    return vim
-      .iter({
-        "Clone",
-        "Copy",
-        "Deref",
-        "DerefMut",
-        "Borrow",
-        "BorrowMut",
-        "Drop",
-        "ToString",
-        "ToOwned",
-        "PartialEq",
-        "PartialOrd",
-        "AsRef",
-        "AsMut",
-        "From",
-        "Into",
-        "TryFrom",
-        "TryInto",
-        "Default",
-      })
-      :find(function(x)
-        return x == trait
-      end) ~= nil
-  end
-  local trait1 = extract_trait(entry1)
-  local trait2 = extract_trait(entry2)
-  if trait1 ~= trait2 then
-    -- prioritize no trait
-    if trait1 == nil then
-      return true
-    end
-    if trait2 == nil then
       return false
     end
-    local is_common_1 = is_common_trait(trait1)
-    local is_common_2 = is_common_trait(trait2)
-    -- deprioritize common traits
-    if is_common_1 ~= is_common_2 then
-      return not is_common_1
+    -- find `(as Trait)` in the label
+    local trait = label:match "%(as ([^)]+)%)"
+    if trait == nil then
+      return false
     end
+    return vim
+        .iter({
+          "Clone",
+          "Copy",
+          "Deref",
+          "DerefMut",
+          "Borrow",
+          "BorrowMut",
+          "Drop",
+          "ToString",
+          "ToOwned",
+          "PartialEq",
+          "PartialOrd",
+          "AsRef",
+          "AsMut",
+          "From",
+          "Into",
+          "TryFrom",
+          "TryInto",
+          "Default",
+        })
+        :find(function(x)
+          return x == trait
+        end) ~= nil
+  end
+  local is_common_1 = is_common_trait(entry1)
+  local is_common_2 = is_common_trait(entry2)
+  if is_common_1 ~= is_common_2 then
+    return not is_common_1
   end
 end
 
