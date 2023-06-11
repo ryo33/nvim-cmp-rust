@@ -24,29 +24,29 @@ local function deprioritize_common_traits(entry1, entry2)
   end
   local function is_common_trait(trait)
     return vim
-        .iter({
-          "Clone",
-          "Copy",
-          "Deref",
-          "DerefMut",
-          "Borrow",
-          "BorrowMut",
-          "Drop",
-          "ToString",
-          "ToOwned",
-          "PartialEq",
-          "PartialOrd",
-          "AsRef",
-          "AsMut",
-          "From",
-          "Into",
-          "TryFrom",
-          "TryInto",
-          "Default",
-        })
-        :find(function(x)
-          return x == trait
-        end) ~= nil
+      .iter({
+        "Clone",
+        "Copy",
+        "Deref",
+        "DerefMut",
+        "Borrow",
+        "BorrowMut",
+        "Drop",
+        "ToString",
+        "ToOwned",
+        "PartialEq",
+        "PartialOrd",
+        "AsRef",
+        "AsMut",
+        "From",
+        "Into",
+        "TryFrom",
+        "TryInto",
+        "Default",
+      })
+      :find(function(x)
+        return x == trait
+      end) ~= nil
   end
   local trait1 = extract_trait(entry1)
   local trait2 = extract_trait(entry2)
@@ -89,7 +89,7 @@ local function deprioritize_deref(entry1, entry2)
     if label == nil then
       return false
     end
-    return label:match "%(use %a+::ops::Deref" ~= nil
+    return label:match "Deref" ~= nil
   end
   local use1 = has_deref(entry1)
   local use2 = has_deref(entry2)
