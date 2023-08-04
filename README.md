@@ -26,3 +26,7 @@ cmp.setup.filetype({ "rust" }, {
   },
 })
 ```
+
+## License
+
+You can choose either MIT or Apache 2.0
